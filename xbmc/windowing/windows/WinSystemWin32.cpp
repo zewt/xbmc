@@ -126,6 +126,9 @@ bool CWinSystemWin32::CreateNewWindow(const CStdString& name, bool fullScreen, R
 
   ResizeInternal(true);
 
+  // Start WM_TIMER.
+  SetTimer(hWnd, 0, 1000, NULL);
+
   // Show the window
   ShowWindow( m_hWnd, SW_SHOWDEFAULT );
   UpdateWindow( m_hWnd );

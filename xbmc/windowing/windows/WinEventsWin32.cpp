@@ -719,6 +719,19 @@ LRESULT CALLBACK CWinEventsWin32::WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, L
       //some other app has painted over our window, mark everything as dirty
       g_windowManager.MarkDirty();
       break;
+    case WM_TIMER:
+    {
+      bool hasFocus = GetForegroundWindow() == hWnd;
+      CLog::Log(LOGDEBUG,"WM_TIMER has focus: %i", hasFocus);
+
+      // Reset the input idle timer.
+      if(hasFocus)
+        SetThreadExecutionState(ES_DISPLAY_REQUIRED|ES_SYSTEM_REQUIRED);
+
+      // Schedule the next timer.
+      SetTimer(hWnd, 0, 1000, NULL);
+      break;
+    }
     case BONJOUR_EVENT:
       CZeroconf::GetInstance()->ProcessResults();
       break;
